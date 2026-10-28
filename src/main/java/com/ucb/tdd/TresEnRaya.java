@@ -9,6 +9,8 @@ public class TresEnRaya {
     
     private final int LIMITE = 3;
     
+    private int jugadas = 0;
+    
     
     public String jugar(int x, int y) throws Exception{
         
@@ -57,6 +59,7 @@ public class TresEnRaya {
             throw new Exception("La posicion ya esta ocupada");
         } else{
             tablero[x-1][y-1] = ultimoJugador;
+            jugadas++;
             System.out.println("Ocupando posicion: "+x+", "+y);
         }
     }
@@ -76,5 +79,37 @@ public class TresEnRaya {
         } 
         return 'X';
         
+    }
+
+    public char casillaEn(int x, int y) throws Exception {
+        verificarEje(x);
+        verificarEje(y);
+        return tablero[x-1][y-1];
+    }
+    
+    public int jugadasRealizadas() {
+        return jugadas;
+    }
+    
+    public void reiniciar() {
+        for (int i = 0; i < LIMITE; i++) {
+            for (int j = 0; j < LIMITE; j++) {
+                tablero[i][j] = '0';
+            }
+        }
+        ultimoJugador = '+';
+        jugadas = 0;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < LIMITE; i++) {
+            if (i > 0) {
+                sb.append('\n');
+            }
+            sb.append(tablero[i][0]).append('|').append(tablero[i][1]).append('|').append(tablero[i][2]);
+        }
+        return sb.toString();
     }
 }

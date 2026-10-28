@@ -1,157 +1,216 @@
 package com.ucb.tdd;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 public class TresEnRayaTest {
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-    
-    private TresEnRaya tresEnRaya;
-    
-    
-    public final void before(){
-        
-    }
-    
-    
-    @Test
-    public void cuandoFueraXlanzarExcepcion() throws Exception{
-        
-        //1. Preparacion de la prueba
-        tresEnRaya = new TresEnRaya();
-        System.out.println("Inicializando Prueba.... " + tresEnRaya.toString());
 
-        //2. Logica de la prueba
-        
-        //3. Verificacion o Assert
-        exception.expect(Exception.class);
-        tresEnRaya.jugar(5,2);
-    }
-    
-    @Test
-    public void cuandoFueraYlanzarExcepcion() throws Exception{
-        //1. Preparacion de la prueba
-        tresEnRaya = new TresEnRaya();
-        System.out.println("Inicializando Prueba.... " + tresEnRaya.toString());
+    private TresEnRaya juego;
 
-        //2. Logica de la prueba
-        
-        //3. Verificacion o Assert
-        exception.expect(Exception.class);
-        tresEnRaya.jugar(2,5);
+    @Before
+    public void setUp() {
+        juego = new TresEnRaya();
     }
-    
-    @Test
-    public void cuandoLugarOcupadoLanzarExcepcion()throws Exception {
-        //1. Preparacion de la prueba
-        tresEnRaya = new TresEnRaya();
-        System.out.println("Inicializando Prueba.... " + tresEnRaya.toString());
-        
-        //2. Logica de la prueba
-        tresEnRaya.jugar(1,3);
-        
-        //3. Verificacion o Assert
-        exception.expect(Exception.class);
-        tresEnRaya.jugar(1,3);
-        
-    }
-    
-    @Test
-    public void siPrimerTurnoEntoncesJuegaX(){
-        //1. Preparacion de la prueba
-        tresEnRaya = new TresEnRaya();
-        System.out.println("Inicializando Prueba.... " + tresEnRaya.toString());
 
-        //3. Verificacion o Assert
-        assertEquals('X',tresEnRaya.siguienteTurno());
-        
+    private String jugarSecuencia(int[][] jugadas) throws Exception {
+        String resultado = null;
+        for (int[] j : jugadas) {
+            resultado = juego.jugar(j[0], j[1]);
+        }
+        return resultado;
     }
-    
-    @Test
-    public void siPrimerTurnoXSiguienteMas() throws Exception{
-        //1. Preparacion de la prueba
-        tresEnRaya = new TresEnRaya();
-        System.out.println("Inicializando Prueba.... " + tresEnRaya.toString());
-        
-        tresEnRaya.jugar(2, 1); //X
-        assertEquals('+',tresEnRaya.siguienteTurno());
-        
-        tresEnRaya.jugar(2, 2); //+
-        assertEquals('X',tresEnRaya.siguienteTurno());
-        
-        
-    }
-    
-    @Test
-    public void cuandoNoHayGanador() throws Exception{
-        //1. Preparacion de la prueba
-        tresEnRaya = new TresEnRaya();
-        System.out.println("Inicializando Prueba.... " + tresEnRaya.toString());
-        String  resultado = tresEnRaya.jugar(2, 1); //X
-        assertEquals("No hay ganador", resultado);
-        
-    }
-    
-    @Test
-    public void siLlenaColumnaEntoncesGana()  throws Exception{
-        //1. Preparacion de la prueba
-        tresEnRaya = new TresEnRaya();
-        System.out.println("Inicializando Prueba.... " + tresEnRaya.toString());
-        
-        tresEnRaya.jugar(1, 1);//X
-        tresEnRaya.jugar(1, 2);//+
-        tresEnRaya.jugar(2, 1);//X
-        tresEnRaya.jugar(2, 2);//+
-        String  resultado = tresEnRaya.jugar(3, 1); //X
-        assertEquals("X es el ganador", resultado);
-    }
-    
-    @Test
-    public void siLlenaFilaEntoncesGana() throws Exception{
-        //1. Preparacion de la prueba
-        tresEnRaya = new TresEnRaya();
-        System.out.println("Inicializando Prueba.... " + tresEnRaya.toString());
 
-        tresEnRaya.jugar(2, 1);//X
-        tresEnRaya.jugar(1, 1);//+
-        tresEnRaya.jugar(3, 1);//X
-        tresEnRaya.jugar(1, 2);//+
-        tresEnRaya.jugar(2, 2);//X
-        String  resultado = tresEnRaya.jugar(1, 3); //+
-        assertEquals("+ es el ganador", resultado);
-    }
-    
     @Test
-    public void siLlenaDiagonalEntoncesGana() throws Exception{
-        //1. Preparacion de la prueba
-        tresEnRaya = new TresEnRaya();
-        System.out.println("Inicializando Prueba.... " + tresEnRaya.toString());
+    public void primerTurnoEsDeX() {
+        assertEquals('X', juego.siguienteTurno());
+    }
 
-        tresEnRaya.jugar(1, 1);//X
-        tresEnRaya.jugar(1, 2);//+
-        tresEnRaya.jugar(2, 2);//X
-        tresEnRaya.jugar(1, 3);//+
-        String  resultado = tresEnRaya.jugar(3, 3);//X
-        assertEquals("X es el ganador", resultado);
-    }
-    
     @Test
-    public void siLlenaDiagonalOpuestaEntoncesGana() throws Exception{
-        //1. Preparacion de la prueba
-        tresEnRaya = new TresEnRaya();
-        System.out.println("Inicializando Prueba.... " + tresEnRaya.toString());
-        
-        tresEnRaya.jugar(1, 2);//X
-        tresEnRaya.jugar(1, 3);//+
-        tresEnRaya.jugar(1, 1);//X
-        tresEnRaya.jugar(2, 2);//+
-        tresEnRaya.jugar(2, 3);//X
-        String  resultado = tresEnRaya.jugar(3, 1);//+
-        assertEquals("+ es el ganador", resultado);
+    public void losTurnosSeAlternanEntreXyMas() throws Exception {
+        juego.jugar(1, 1);
+        assertEquals('+', juego.siguienteTurno());
+        juego.jugar(2, 2);
+        assertEquals('X', juego.siguienteTurno());
+    }
+
+    @Test
+    public void coordenadaFueraDelTableroLanzaExcepcion() {
+        int[][] invalidas = {{0, 1}, {4, 1}, {1, 0}, {1, 4}, {-1, 2}};
+        for (int[] c : invalidas) {
+            try {
+                juego.jugar(c[0], c[1]);
+                fail("Debia fallar con " + c[0] + "," + c[1]);
+            } catch (Exception e) {
+                assertEquals('X', juego.siguienteTurno());
+            }
+        }
+    }
+
+    @Test(expected = Exception.class)
+    public void casillaOcupadaLanzaExcepcion() throws Exception {
+        juego.jugar(1, 3);
+        juego.jugar(1, 3);
+    }
+
+    @Test
+    public void sinLineaCompletaNoHayGanador() throws Exception {
+        assertEquals("No hay ganador", juego.jugar(2, 1));
+    }
+
+    @Test
+    public void xGanaConUnaFilaCompleta() throws Exception {
+        assertEquals("X es el ganador",
+                jugarSecuencia(new int[][] {{1, 1}, {2, 1}, {1, 2}, {2, 2}, {1, 3}}));
+    }
+
+    @Test
+    public void masGanaConUnaColumnaCompleta() throws Exception {
+        assertEquals("+ es el ganador",
+                jugarSecuencia(new int[][] {{1, 1}, {1, 2}, {2, 1}, {2, 2}, {3, 3}, {3, 2}}));
+    }
+
+    @Test
+    public void xGanaConLaDiagonalPrincipal() throws Exception {
+        assertEquals("X es el ganador",
+                jugarSecuencia(new int[][] {{1, 1}, {1, 2}, {2, 2}, {1, 3}, {3, 3}}));
+    }
+
+    @Test
+    public void masGanaConLaDiagonalOpuesta() throws Exception {
+        assertEquals("+ es el ganador",
+                jugarSecuencia(new int[][] {{1, 1}, {1, 3}, {1, 2}, {2, 2}, {2, 1}, {3, 1}}));
+    }
+
+    @Test
+    public void tresFichasIgualesSinAlinearNoGanan() throws Exception {
+        assertEquals("No hay ganador",
+                jugarSecuencia(new int[][] {{1, 1}, {2, 1}, {1, 3}, {2, 2}, {3, 2}}));
+    }
+
+    @Test
+    public void ganarEnLaUltimaJugadaDevuelveGanador() throws Exception {
+        // la novena jugada de X completa la diagonal opuesta (1,3) (2,2) (3,1) con el tablero lleno
+        assertEquals("X es el ganador",
+                jugarSecuencia(new int[][] {
+                        {1, 1}, {1, 2}, {1, 3}, {2, 1}, {3, 1},
+                        {3, 2}, {2, 3}, {3, 3}, {2, 2}}));
+    }
+
+    @Test
+    public void lasCasillasEmpiezanVacias() throws Exception {
+        for (int fila = 1; fila <= 3; fila++) {
+            for (int columna = 1; columna <= 3; columna++) {
+                assertEquals('0', juego.casillaEn(fila, columna));
+            }
+        }
+    }
+
+    @Test
+    public void casillaEnReflejaQuienJugoYEnQueFilaYColumna() throws Exception {
+        juego.jugar(2, 3);
+        juego.jugar(1, 1);
+        assertEquals('X', juego.casillaEn(2, 3));
+        assertEquals('+', juego.casillaEn(1, 1));
+        assertEquals('0', juego.casillaEn(3, 2));
+    }
+
+    @Test(expected = Exception.class)
+    public void casillaEnFueraDelTableroLanzaExcepcion() throws Exception {
+        juego.casillaEn(4, 1);
+    }
+
+    @Test
+    public void jugadasRealizadasCuentaSoloLasJugadasValidas() throws Exception {
+        assertEquals(0, juego.jugadasRealizadas());
+        juego.jugar(1, 1);
+        juego.jugar(2, 2);
+        assertEquals(2, juego.jugadasRealizadas());
+        try {
+            juego.jugar(9, 9);
+        } catch (Exception e) {
+            assertEquals(2, juego.jugadasRealizadas());
+        }
+    }
+
+    @Test
+    public void unaJugadaFueraDelTableroNoOcupaNingunaCasilla() {
+        try {
+            juego.jugar(1, 7);
+            fail("Debia lanzar excepcion");
+        } catch (Exception e) {
+            assertEquals(0, juego.jugadasRealizadas());
+        }
+    }
+
+    @Test
+    public void reiniciarLimpiaElTableroYDevuelveElTurnoAX() throws Exception {
+        juego.jugar(1, 1);
+        juego.jugar(2, 2);
+        juego.reiniciar();
+        assertEquals('X', juego.siguienteTurno());
+        assertEquals(0, juego.jugadasRealizadas());
+        assertEquals('0', juego.casillaEn(1, 1));
+        assertEquals("No hay ganador", juego.jugar(1, 1));
+    }
+
+    @Test
+    public void reiniciarDespuesDeUnaVictoriaEmpiezaUnaPartidaNueva() throws Exception {
+        jugarSecuencia(new int[][] {{1, 1}, {2, 1}, {1, 2}, {2, 2}, {1, 3}});
+        juego.reiniciar();
+        assertEquals("No hay ganador", juego.jugar(1, 3));
+        assertEquals('X', juego.casillaEn(1, 3));
+    }
+
+    @Test
+    public void dosPartidasSonIndependientes() throws Exception {
+        TresEnRaya otro = new TresEnRaya();
+        juego.jugar(1, 1);
+        assertEquals('0', otro.casillaEn(1, 1));
+        assertEquals('X', otro.siguienteTurno());
+    }
+
+    @Test
+    public void toStringMuestraElTablero() throws Exception {
+        assertEquals("0|0|0\n0|0|0\n0|0|0", juego.toString());
+        juego.jugar(1, 1);
+        juego.jugar(2, 3);
+        assertEquals("X|0|0\n0|0|+\n0|0|0", juego.toString());
+    }
+
+    @Test
+    public void xGanaConCadaUnaDeLasOchoLineas() throws Exception {
+        int[][][] lineas = {
+                {{1, 1}, {1, 2}, {1, 3}}, {{2, 1}, {2, 2}, {2, 3}}, {{3, 1}, {3, 2}, {3, 3}},
+                {{1, 1}, {2, 1}, {3, 1}}, {{1, 2}, {2, 2}, {3, 2}}, {{1, 3}, {2, 3}, {3, 3}},
+                {{1, 1}, {2, 2}, {3, 3}}, {{1, 3}, {2, 2}, {3, 1}}};
+        for (int[][] linea : lineas) {
+            TresEnRaya partida = new TresEnRaya();
+            int[][] relleno = celdasFueraDe(linea);
+            partida.jugar(linea[0][0], linea[0][1]);
+            partida.jugar(relleno[0][0], relleno[0][1]);
+            partida.jugar(linea[1][0], linea[1][1]);
+            partida.jugar(relleno[1][0], relleno[1][1]);
+            assertEquals("X es el ganador", partida.jugar(linea[2][0], linea[2][1]));
+        }
+    }
+
+    private int[][] celdasFueraDe(int[][] linea) {
+        int[][] libres = new int[2][];
+        int encontradas = 0;
+        for (int fila = 1; fila <= 3 && encontradas < 2; fila++) {
+            for (int columna = 1; columna <= 3 && encontradas < 2; columna++) {
+                boolean enLinea = false;
+                for (int[] c : linea) {
+                    enLinea |= c[0] == fila && c[1] == columna;
+                }
+                if (!enLinea) {
+                    libres[encontradas++] = new int[] {fila, columna};
+                }
+            }
+        }
+        return libres;
     }
 }
