@@ -20,3 +20,14 @@ target/maven-status/maven-compiler-plugin/compile/default-compile/dependencies.l
 target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
 target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
 target/surefire-reports/*.*
+
+# Carpeta de build de Maven (completa)
+target/
+
+# macOS
+.DS_Store
+
+# IDEs
+.idea/
+*.iml
+.vscode/
